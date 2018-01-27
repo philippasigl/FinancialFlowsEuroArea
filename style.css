@@ -1,0 +1,61 @@
+h1 {
+  font-family: 'Helvetica';
+  font-weight: 500;
+  line-height: 1.1;
+  font-size: 40px;
+  color: #000000;
+}
+
+body {
+  background-color: #fff;
+  font-family: 'Helvetica';
+  font-weight: 500;
+  line-height: 1.1;
+  font-size: 14px;
+  color: #000000;
+}
+.set1 .well { 
+background: transparent;
+/*border: 200px;*/
+color: #000000;
+font-family:'Helvetica';
+}
+
+/*label for QE start*/
+/*133px with start in 2014 Q1*/
+.set0 {
+  font-family:'Helvetica';
+  position: absolute;
+  top: 39px;
+  left: 280px;
+}
+
+#explanatory_note {
+font-family:'Helvetica';
+white-space: pre-wrap;
+/*white-space: normal;*/
+word-break: normal;
+}
+
+#definitions {
+font-family:'Helvetica';
+white-space: pre-wrap;
+/*white-space: normal;*/
+word-break: normal;
+}
+
+/*slider*/
+.irs-bar {width: 100%; background: #4c7ee1; }
+/*.irs-bar-edge {background: #4c7ee1; border-radius: 0px; width: 20px;}*/
+.irs-grid-text {font-family: 'Helvetica';color: #000000;}
+.irs-single {color: white; background:#4c7ee1;}
+
+/*play button for timeline*/
+.slider-animate-button {
+  position: absolute;
+  top: 97px;
+  left:370px;
+  color: #4c7ee1;
+}
+
+
