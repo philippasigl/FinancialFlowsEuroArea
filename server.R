@@ -9,6 +9,7 @@
 
 library(shiny)
 library(visNetwork)
+#source("finflows.R")
 source("finflows2.R")
 source("explanatory_note.R")
 
@@ -26,6 +27,13 @@ shinyServer(function(input, output,session) {
   output$esa<-renderUI({
     tagList("Reference guide definitions:",urlESA2010)
   })
+  # Expression that generates a plot of the distribution. The expression
+  # is wrapped in a call to renderPlot to indicate that:
+  #
+  #  1) It is "reactive" and therefore should be automatically 
+  #     re-executed when inputs change
+  #  2) Its output type is a plot 
+  #
 
   output$net <- renderVisNetwork({
     net[[input$quarter+1]]

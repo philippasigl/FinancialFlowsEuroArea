@@ -70,7 +70,7 @@ for (t in 1:length(files)) {
                          arrows =list(to = list(enabled = FALSE,scaleFactor=0),from = list(enabled = TRUE,scaleFactor=0.2)),
                         arrowStrikethrough=FALSE,
                          title=paste0(HTML("&#8364;"),negatives$flow," billion"),
-                         width=negatives$flow/10,
+                         width=negatives$flow/8,
                        physics=FALSE
     )
   }
@@ -78,7 +78,7 @@ for (t in 1:length(files)) {
                          arrows =list(to = list(enabled = TRUE,scaleFactor=0.2),from = list(enabled = FALSE,scaleFactor=0)),
                         arrowStrikethrough=FALSE,
                          title=paste0(HTML("&#8364;"),positives$flow," billion"),
-                         width=positives$flow/10,
+                         width=positives$flow/8,
                         physics=FALSE
   )
   edges[[t]]<-rbind(negatives,positives)

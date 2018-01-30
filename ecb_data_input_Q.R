@@ -6,7 +6,7 @@ library(pdfetch)
 ###info###
 
 ##timeline
-#2007-2017 
+#2008-2016 
 #(limited by investment fund data availability)
 
 ##ids
@@ -22,6 +22,7 @@ library(pdfetch)
 #other assets/liabilities: 10
 #loans: 11
 #real economy: 12
+#insurance and pension funds: 13
 
 ###-----------------------------------------------------------------------------------------------------------###
 ###definitions###
@@ -44,12 +45,21 @@ re<-"NET INVESTMENTS"
 income<-"INCOME"
 ofi<-"NON-BANKS"
 ###-----------------------------------------------------------------------------------------------------------###
+setwd("C:/Users/Philippa/Desktop/Econ research/Follow The Money/microblog/finflows")
+#source("settings.R")
 startPeriod<-"2007"
 endPeriod<-"2017"
 lastQuarter<-"1"
 instr_dummy<-1000000
 
 ###1.mfis - aggregated
+##dep
+#UNUSED
+mfi_dep<-get_data("QSA.Q.N.I8.W0.S12K.S1.N.A.F.F2.T._Z.XDC._T.S.V.N._T",filter=list(startPeriod=startPeriod,endPeriod=endPeriod))
+mfi_dep<-data.frame(mfi_dep)
+mfi_dep<-data.frame("id_holder"=1,"party"=mfi,"id_rec"=9,"instrument"=dep_and_cur,"time"=mfi_dep$obstime,
+                    "value"=mfi_dep$obsvalue,"type"=1,"flow"=mfi_dep$obsvalue)
+
 ##debt securities
 #st
 mfi_debt_sec_st<-get_data("QSA.Q.N.I8.W0.S12K.S1.N.A.F.F3.S._Z.XDC._T.S.V.N._T",filter=list(startPeriod=startPeriod,endPeriod=endPeriod))
@@ -79,7 +89,7 @@ mfi_unlisted_shares<-data.frame(mfi_unlisted_shares)
 mfi_unlisted_shares<-data.frame("id_holder"=1,"party"=mfi,"id_rec"=8,"instrument"=equities,"time"=mfi_unlisted_shares$obstime,
                           "value"=mfi_unlisted_shares$obsvalue,"type"=1,"flow"=mfi_unlisted_shares$obsvalue)
 mfi_equities<-mfi_listed_shares
-mfi_equities$flow<-mfi_listed_shares$flow+mfi_unlisted_shares$flow
+mfi_equities$flow<-mfi_listed_shares$flow++mfi_unlisted_shares$flow
 
 ##loans lt
 mfi_loans_lt<-get_data("QSA.Q.N.I8.W0.S12K.S1.N.A.F.F4.L._Z.XDC._T.S.V.N._T",filter=list(startPeriod=startPeriod,endPeriod=endPeriod))
@@ -106,11 +116,39 @@ fi_loans<-data.frame(fi_loans)
 fi_loans<-data.frame("id_holder"=3,"party"=ofi,"id_rec"=11,"instrument"=loans,"time"=fi_loans$obstime,
                      "value"=fi_loans$obsvalue,"type"=1,"flow"=fi_loans$obsvalue)
 
+#loans
+#iv_loans<-get_data("IVF.Q.U2.N.T0.A20.A.4.Z5.0000.Z01.E",filter=list(startPeriod=startPeriod,endPeriod=endPeriod))
+#iv_loans<-data.frame(iv_loans)
+#iv_loans<-data.frame("id_holder"=3,"party"=ofi,"id_rec"=11,"instrument"=loans,"time"=iv_loans$obstime,
+#                        "value"=iv_loans$obsvalue,"type"=1,"flow"=iv_loans$obsvalue)
+
+
 ##debt securities
 fi_debt_sec<-get_data("QSA.Q.N.I8.W0.S12.S1.N.A.F.F3.T._Z.XDC._T.S.V.N._T",filter=list(startPeriod=startPeriod,endPeriod=endPeriod))
 fi_debt_sec<-data.frame(fi_debt_sec)
 fi_debt_sec<-data.frame("id_holder"=3,"party"=ofi,"id_rec"=7,"instrument"=debt_sec,"time"=fi_debt_sec$obstime,
                         "value"=fi_debt_sec$obsvalue,"type"=1,"flow"=fi_debt_sec$obsvalue)
+
+##debt securities
+#iv_debt_sec<-get_data("IVF.Q.U2.N.T0.A30.A.4.Z5.0000.Z01.E",filter=list(startPeriod=startPeriod,endPeriod=endPeriod))
+#iv_debt_sec<-data.frame(iv_debt_sec)
+#iv_debt_sec<-data.frame("id_holder"=3,"party"=ofi,"id_rec"=7,"instrument"=debt_sec,"time"=iv_debt_sec$obstime,
+#                        "value"=iv_debt_sec$obsvalue,"type"=1,"flow"=iv_debt_sec$obsvalue)
+
+#NOT USED
+#non_iv_debt_sec_st<-get_data("QSA.Q.N.I8.W0.S12O.S1.N.A.F.F3.S._Z.XDC._T.S.V.N._T",filter=list(startPeriod=startPeriod,endPeriod=endPeriod))
+#non_iv_debt_sec_st<-data.frame(non_iv_debt_sec_st)
+#non_iv_debt_sec_st<-data.frame("id_holder"=3,"party"=ofi,"id_rec"=7,"instrument"=debt_sec,"time"=non_iv_debt_sec_st$obstime,
+#                               "value"=non_iv_debt_sec_st$obsvalue,"type"=1,"flow"=non_iv_debt_sec_st$obsvalue)
+
+#NOT USED
+#non_iv_debt_sec_lt<-get_data("QSA.Q.N.I8.W0.S12O.S1.N.A.F.F3.S._Z.XDC._T.S.V.N._T",filter=list(startPeriod=startPeriod,endPeriod=endPeriod))
+#non_iv_debt_sec_lt<-data.frame(non_iv_debt_sec_lt)
+#non_iv_debt_sec_lt<-data.frame("id_holder"=3,"party"=ofi,"id_rec"=7,"instrument"=debt_sec,"time"=non_iv_debt_sec_lt$obstime,
+#                               "value"=non_iv_debt_sec_lt$obsvalue,"type"=1,"flow"=non_iv_debt_sec_lt$obsvalue)
+
+#non_iv_debt_sec<-data.frame("id_holder"=3,"party"=ofi,"id_rec"=7,"instrument"=debt_sec,"time"=non_iv_debt_sec_lt$time,
+#                            "value"=non_iv_debt_sec_lt$value+non_iv_debt_sec_st$value,"type"=1,"flow"=non_iv_debt_sec_lt$value+non_iv_debt_sec_st$value)
 
 ###since other data only available post 2012
 ofi_debt_sec<-iv_debt_sec
@@ -135,6 +173,35 @@ fi_iv_shares<-data.frame("id_holder"=3,"party"=ofi,"id_rec"=14,"instrument"=iv,"
                                "value"=fi_iv_shares$obsvalue,"type"=1,"flow"=fi_iv_shares$obsvalue)
 fi_equities<-fi_listed_shares
 fi_equities$flow<-fi_listed_shares$flow+fi_unlisted_shares$flow
+
+#this excludes iv shares already
+#iv_equities<-get_data("IVF.Q.U2.N.T0.A5A.A.4.Z5.0000.Z01.E",filter=list(startPeriod=startPeriod,endPeriod=endPeriod))
+#iv_equities<-data.frame(iv_equities)
+#iv_equities<-data.frame("id_holder"=3,"party"=ofi,"id_rec"=8,"instrument"=equities,"time"=iv_equities$obstime,
+#                             "value"=iv_equities$obsvalue,"type"=1,"flow"=iv_equities$obsvalue)
+
+#iv_iv_shares<-get_data("IVF.Q.U2.N.T0.A52.A.4.Z5.0000.Z01.E",filter=list(startPeriod=startPeriod,endPeriod=endPeriod))
+#iv_iv_shares<-data.frame(iv_iv_shares)
+#iv_iv_shares<-data.frame("id_holder"=3,"party"=ofi,"id_rec"=14,"instrument"=iv,"time"=iv_iv_shares$obstime,
+#                        "value"=iv_iv_shares$obsvalue,"type"=1,"flow"=iv_iv_shares$obsvalue)
+
+#iv_listed_shares<-get_data("QSA.Q.N.I8.W0.S124.S1.N.A.F.F511._Z._Z.XDC._T.S.V.N._T",filter=list(startPeriod=startPeriod,endPeriod=endPeriod))
+#iv_listed_shares<-data.frame(iv_listed_shares)
+#iv_listed_shares<-data.frame("id_holder"=3,"party"=ofi,"id_rec"=8,"instrument"=equities,"time"=iv_listed_shares$obstime,
+#                        "value"=iv_listed_shares$obsvalue,"type"=1,"flow"=iv_listed_shares$obsvalue)
+
+#iv_unlisted_shares<-get_data("QSA.Q.N.I8.W0.S124.S1.N.A.F.F51M._Z._Z.XDC._T.S.V.N._T",filter=list(startPeriod=startPeriod,endPeriod=endPeriod))
+#iv_unlisted_shares<-data.frame(iv_unlisted_shares)
+#iv_unlisted_shares<-data.frame("id_holder"=3,"party"=ofi,"id_rec"=8,"instrument"=equities,"time"=iv_unlisted_shares$obstime,
+#                         "value"=iv_unlisted_shares$obsvalue,"type"=1,"flow"=iv_unlisted_shares$obsvalue)
+
+#iv_iv_shares<-get_data("QSA.Q.N.I8.W0.S124.S1.N.A.F.F52._Z._Z.XDC._T.S.V.N._T",filter=list(startPeriod=startPeriod,endPeriod=endPeriod))
+#iv_iv_shares<-data.frame(iv_iv_shares)
+#iv_iv_shares<-data.frame("id_holder"=3,"party"=ofi,"id_rec"=14,"instrument"=iv,"time"=iv_iv_shares$obstime,
+#                        "value"=iv_iv_shares$obsvalue,"type"=1,"flow"=iv_iv_shares$obsvalue)
+
+#ofi_equities<-iv_equities
+#ofi_iv_shares<-iv_iv_shares
 
 ##total
 #NOT USED
@@ -168,6 +235,12 @@ nfc_iv_shares<-data.frame("id_holder"=4,"party"=nfc,"id_rec"=14,"instrument"=iv,
 
 nfc_equities<-nfc_listed_shares
 nfc_equities$flow<-nfc_listed_shares$flow+nfc_unlisted_shares$flow
+
+#incl inv fund shares
+#nfc_equities<-get_data("QSA.Q.N.I8.W0.S11.S1.N.A.F.F5._Z._Z.XDC._T.S.V.N._T",filter=list(startPeriod=startPeriod,endPeriod=endPeriod))
+#nfc_equities<-data.frame(nfc_equities)
+#nfc_equities<-data.frame("id_holder"=4,"party"=nfc,"id_rec"=8,"instrument"=equities,"time"=nfc_equities$obstime,
+#                         "value"=nfc_equities$obsvalue,"type"=1,"flow"=nfc_equities$obsvalue)
 
 ##investment
 nfc_re<-get_data("QSA.Q.N.I8.W0.S11.S1.N.D.P51G._Z._Z._Z.XDC._T.S.V.N._T",filter=list(startPeriod=startPeriod,endPeriod=endPeriod))
@@ -372,6 +445,44 @@ iv_shares_fi<-data.frame("id_holder"=14,"party"=iv,"id_rec"=3,"instrument"=ofi,"
 equities_fi<-listed_shares_fi
 equities_fi$flow<-listed_shares_fi$flow+unlisted_shares_fi$flow
 
+#ofi
+#listed_shares_ofi<-get_data("QSA.Q.N.I8.W0.S12P.S1.N.L.F.F511._Z._Z.XDC._T.S.V.N._T",filter=list(startPeriod=startPeriod,endPeriod=endPeriod))
+#listed_shares_ofi<-data.frame(listed_shares_ofi)
+#listed_shares_ofi<-data.frame("id_holder"=8,"party"=equities,"id_rec"=3,"instrument"=ofi,"time"=listed_shares_ofi$obstime,
+#                          "value"=listed_shares_ofi$obsvalue,"type"=2,"flow"=listed_shares_ofi$obsvalue)
+
+#unlisted_shares_ofi<-get_data("QSA.Q.N.I8.W0.S12P.S1.N.L.F.F51M._Z._Z.XDC._T.S.V.N._T",filter=list(startPeriod=startPeriod,endPeriod=endPeriod))
+#unlisted_shares_ofi<-data.frame(unlisted_shares_ofi)
+#unlisted_shares_ofi<-data.frame("id_holder"=8,"party"=equities,"id_rec"=3,"instrument"=ofi,"time"=unlisted_shares_ofi$obstime,
+#                              "value"=unlisted_shares_ofi$obsvalue,"type"=2,"flow"=unlisted_shares_ofi$obsvalue)
+
+#iv_shares_ofi<-get_data("QSA.Q.N.I8.W0.S12P.S1.N.L.F.F52._Z._Z.XDC._T.S.V.N._T",filter=list(startPeriod=startPeriod,endPeriod=endPeriod))
+#iv_shares_ofi<-data.frame(iv_shares_ofi)
+#iv_shares_ofi<-data.frame("id_holder"=14,"party"=iv,"id_rec"=3,"instrument"=ofi,"time"=iv_shares_ofi$obstime,
+#                         "value"=iv_shares_ofi$obsvalue,"type"=2,"flow"=iv_shares_ofi$obsvalue)
+
+#iv_shares_iv<-get_data("IVF.Q.U2.N.T0.L30.A.4.Z5.0000.Z01.E",filter=list(startPeriod=startPeriod,endPeriod=endPeriod))
+#iv_shares_iv<-data.frame(iv_shares_iv)
+#iv_shares_iv<-data.frame("id_holder"=14,"party"=iv,"id_rec"=3,"instrument"=ofi,"time"=iv_shares_iv$obstime,
+#                          "value"=iv_shares_iv$obsvalue,"type"=2,"flow"=iv_shares_iv$obsvalue)
+
+#equities_ofi<-listed_shares_ofi
+#equities_ofi$flow<-listed_shares_ofi$flow+unlisted_shares_ofi$flow
+
+##nfc
+#equities=listed_shares+unlisted_shares since no inv fund shares issued
+#listed shares
+#listed_shares_nfc<-get_data("QSA.Q.N.I8.W0.S11.S1.N.L.F.F511._Z._Z.XDC._T.S.V.N._T",filter=list(startPeriod=startPeriod,endPeriod=endPeriod))
+#listed_shares_nfc<-data.frame(listed_shares_nfc)
+#listed_shares_nfc<-data.frame("id_holder"=8,"party"=equities,"id_rec"=4,"instrument"=nfc,"time"=listed_shares_nfc$obstime,
+#                                "value"=listed_shares_nfc$obsvalue,"type"=2,"flow"=listed_shares_nfc$obsvalue)
+
+#unlisted shares
+#unlisted_shares_nfc<-get_data("QSA.Q.N.I8.W0.S11.S1.N.L.F.F51M._Z._Z.XDC._T.S.V.N._T",filter=list(startPeriod=startPeriod,endPeriod=endPeriod))
+#unlisted_shares_nfc<-data.frame(unlisted_shares_nfc)
+#unlisted_shares_nfc<-data.frame("id_holder"=8,"party"=equities,"id_rec"=4,"instrument"=nfc,"time"=unlisted_shares_nfc$obstime,
+#                         "value"=unlisted_shares_nfc$obsvalue,"type"=2,"flow"=unlisted_shares_nfc$obsvalue)
+
 #equity and investment fund shares issued by nfc
 equities_nfc<-get_data("QSA.Q.N.I8.W0.S11.S1.N.L.F.F5._Z._Z.XDC._T.S.V.N._T",filter=list(startPeriod=startPeriod,endPeriod=endPeriod))
 equities_nfc<-data.frame(equities_nfc)
@@ -380,6 +491,14 @@ equities_nfc<-data.frame("id_holder"=8,"party"=equities,"id_rec"=4,"instrument"=
 
 equities_bs<-data.frame("id_holder"=8,"party"=equities,"instrument"=total,"time"=equities_nfc$time,"value"=instr_dummy,"type"=2)
 iv_shares_bs<-data.frame("id_holder"=14,"party"=iv,"instrument"=total,"time"=equities_nfc$time,"value"=instr_dummy,"type"=2)
+
+###9. deposits
+#UNUSED
+##mfi
+#dep_mfi<-data.frame("id_holder"=9,"party"=dep_and_cur,"id_rec"=1,"instrument"=mfi,time=nfc_dep$time,
+#                    "value"=1,"type"=2,"flow"=nfc_dep$flow+hh_dep$flow+ofi_dep$flow+ipf_dep$flow)
+
+#dep_bs<-data.frame("id_holder"=9,"party"=dep_and_cur,"instrument"=total,"time"=c(2007:2016),"value"=instr_dummy,"type"=2)
 
 ###9. loans
 ##govt
@@ -394,6 +513,16 @@ loans_fi<-data.frame(loans_fi)
 loans_fi<-data.frame("id_holder"=11,"party"=loans,"id_rec"=3,"instrument"=ofi,"time"=loans_fi$obstime,
                      "value"=loans_fi$obsvalue,"type"=2,"flow"=loans_fi$obsvalue)
 
+##ofi
+#loans_iv<-get_data("IVF.Q.U2.N.T0.L20.A.4.Z5.0000.Z01.E",filter=list(startPeriod=startPeriod,endPeriod=endPeriod))
+#loans_iv<-data.frame(loans_iv)
+#loans_iv<-data.frame("id_holder"=11,"party"=loans,"id_rec"=3,"instrument"=ofi,"time"=loans_iv$obstime,
+#                      "value"=loans_iv$obsvalue,"type"=2,"flow"=loans_iv$obsvalue)
+
+#loans_ofi<-get_data("QSA.Q.N.I8.W0.S12O.S1.N.L.F.F4.T._Z.XDC._T.S.V.N._T",filter=list(startPeriod=startPeriod,endPeriod=endPeriod))
+#loans_ofi<-data.frame(loans_ofi)
+#loans_ofi<-data.frame("id_holder"=11,"party"=loans,"id_rec"=3,"instrument"=ofi,"time"=loans_ofi$obstime,
+#                     "value"=loans_ofi$obsvalue,"type"=2,"flow"=loans_ofi$obsvalue)
 loans_ofi<-loans_iv
 
 ##hhs
@@ -440,7 +569,7 @@ edges<-ddply(edges,.(from,to,time),summarize,flow=sum(flow),type)
 colnames(edges)[5]<-"type"
 
 edges
-setwd("./data/nodes")
+setwd("C:/Users/Philippa/Desktop/Econ research/Follow The Money/microblog/finflows/data/nodes")
 quarter<-0
 year<-as.integer(startPeriod)-1
 distance<-as.integer(startPeriod)+(as.integer(endPeriod)-as.integer(startPeriod))*4
@@ -453,7 +582,7 @@ for (i in startPeriod:distance) {
   if (year==as.integer(endPeriod) && quarter==as.integer(lastQuarter)) break
 }
 
-setwd("./data/edges")
+setwd("C:/Users/Philippa/Desktop/Econ research/Follow The Money/microblog/finflows/data/edges")
 quarter<-0
 year<-as.integer(startPeriod)-1
 for (i in startPeriod:distance) {
